@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAN Store - Магазин скинов CS2</title>
+    <link rel="icon" href="img/5253538253862800833.jpg" type="image/x-icon">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --btn-color: #8ef5d1;
+            --accent-color: #d398f5;
+            --header-bg: #FCD4EB;
+            --bg-light: #fefefe;
+            --text-dark: #333;
+            --card-bg: #fff;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-top: 20px;
+        }
+
+        .custom-header {
+            background-color: var(--header-bg) !important;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--text-dark) !important;
+        }
+
+        .nav-link {
+            color: var(--text-dark) !important;
+            font-weight: 500;
+        }
+
+        .nav-link.active {
+            color: var(--accent-color) !important;
+            font-weight: 600;
+        }
+
+        .btn-custom {
+            background-color: var(--btn-color);
+            color: #333;
+            border: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(142, 245, 209, 0.4);
+        }
+
+        .btn-accent {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            font-weight: 600;
+        }
+
+        .skin-card {
+            background: var(--card-bg);
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            height: 100%;
+        }
+
+        .skin-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .price-tag {
+            background: linear-gradient(45deg, var(--accent-color), #b579e2);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .user-welcome {
+            background: linear-gradient(45deg, var(--btn-color), #aaf5e1);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .quality-factory-new {
+            color: #4b69ff;
+            font-weight: bold;
+        }
+
+        .quality-minimal-wear {
+            color: #5baaff;
+            font-weight: bold;
+        }
+
+        .quality-field-tested {
+            color: #ffa500;
+            font-weight: bold;
+        }
+
+        .skin-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .skin-pattern {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            min-height: 20px;
+        }
+
+        .skin-image {
+            border-radius: 5px;
+            margin-bottom: 10px;
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+        }
+
+        /* Стили для категорий - обновленные */
+        .weapon-category {
+            padding: 15px 20px;
+            border-radius: 15px;
+            background: #ffffff;
+            border: 2px solid #f779f0;
+            min-width: 100px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .weapon-category i {
+            color: #765d92;
+            transition: all 0.3s ease;
+        }
+
+        .weapon-category p {
+            margin: 0;
+            font-weight: 600;
+            color: #685e5e;
+            transition: all 0.3s ease;
+        }
+
+        .weapon-category:hover {
+            background: #f8f0ff;
+            border-color: var(--accent-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(211, 152, 245, 0.3);
+        }
+
+        .weapon-category:hover i {
+            color: var(--accent-color);
+        }
+
+        .weapon-category:hover p {
+            color: var(--accent-color);
+        }
+
+        .weapon-category.active {
+            background: #f8f0ff;
+            border-color: var(--accent-color);
+        }
+
+        .weapon-category.active i {
+            color: var(--accent-color);
+        }
+
+        .weapon-category.active p {
+            color: var(--accent-color);
+        }
+
+        /* Стили для уведомлений */
+        .notification-container {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 350px;
+        }
+
+        .notification {
+            background: rgb(255, 255, 255);
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border-left: 4px solid;
+            animation: slideIn 0.3s ease-out;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .notification.success {
+            border-left-color: #28a745;
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+        }
+
+        .notification.error {
+            border-left-color: #dc3545;
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+        }
+
+        .notification.info {
+            border-left-color: #17a2b8;
+            background: linear-gradient(135deg, #d1ecf1, #bee5eb);
+        }
+
+        .notification-content {
+            flex: 1;
+            margin-right: 10px;
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            font-size: 1.2em;
+            cursor: pointer;
+            color: #666;
+            padding: 0;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .notification-close:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Контейнер для уведомлений -->
+    <div class="notification-container" id="notificationContainer"></div>
+
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg navbar-light custom-header sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-gem"></i> SAN Store
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link active" href="index.html">Главная</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#catalog">Все скины</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#catalog">Ножи</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#catalog">Перчатки</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#catalog">Винтовки</a></li>
+                </ul>
+
+                <div class="d-flex align-items-center">
+                    <!-- Блок для неавторизованных пользователей -->
+                    <div id="authButtons">
+                        <a href="login.html" class="btn btn-outline-dark me-2"><i class="fas fa-sign-in-alt"></i>
+                            Вход</a>
+                        <a href="register.html" class="btn btn-accent"><i class="fas fa-user-plus"></i> Регистрация</a>
+                    </div>
+
+                    <!-- Блок для авторизованных пользователей -->
+                    <div id="userProfile" style="display: none;">
+                        <div class="d-flex align-items-center">
+                            <span class="user-welcome me-3" id="userWelcome">Добро пожаловать!</span>
+                            <a href="profile.html" class="btn btn-custom">
+                                <i class="fas fa-user"></i> Личный кабинет
+                            </a>
+                            <button class="btn btn-outline-dark ms-2" onclick="logout()">
+                                <i class="fas fa-sign-out-alt"></i> Выйти
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Герой секция -->
+    <section class="py-5" style="background: linear-gradient(135deg, #CBE3FA 0%, #fefefe 100%);">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="display-5 fw-bold mb-4">Найдите свой идеальный скин CS2</h1>
+                    <p class="lead mb-4">Самый надежный маркетплейс с минимальными комиссиями. Безопасные сделки,
+                        мгновенная доставка и лучшие цены на рынке.</p>
+                    <a href="#catalog" class="btn btn-custom btn-lg">Смотреть каталог</a>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <img src="img/5253538253862800832.jpg" alt="CS2 Skins" width="300" height="200"
+                        class="img-fluid rounded-3">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Каталог оружия -->
+    <section id="catalog" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5 fw-bold">Каталог скинов</h2>
+
+            <!-- Основные категории -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="d-flex flex-wrap gap-3 justify-content-center">
+                        <div class="weapon-category active" onclick="selectCategory(this, 'all')">
+                            <i class="fas fa-th-large fa-2x mb-2"></i>
+                            <p>Все</p>
+                        </div>
+                        <div class="weapon-category" onclick="selectCategory(this, 'knives')">
+                            <i class="fas fa-gem fa-2x mb-2"></i>
+                            <p>Ножи</p>
+                        </div>
+                        <div class="weapon-category" onclick="selectCategory(this, 'gloves')">
+                            <i class="fas fa-hand-paper fa-2x mb-2"></i>
+                            <p>Перчатки</p>
+                        </div>
+                        <div class="weapon-category" onclick="selectCategory(this, 'rifles')">
+                            <i class="fas fa-crosshairs fa-2x mb-2"></i>
+                            <p>Винтовки</p>
+                        </div>
+                        <div class="weapon-category" onclick="selectCategory(this, 'pistols')">
+                            <i class="fas fa-hand-rock fa-2x mb-2"></i>
+                            <p>Пистолеты</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Контейнер для скинов -->
+            <div class="row g-4">
+                <!-- КАРТОЧКА 1 -->
+                <div class="col-md-6 col-lg-4 col-xl-3">
+                    <div class="skin-card p-3 text-center h-100">
+                        <img src="https://assets.lis-skins.com/market_images/17045_b.png" class="skin-image"
+                            style="border: 3px solid #ffdc6a" alt="Нож-бабочка">
+                        <div class="skin-name">Нож-бабочка | Ультрафиолет</div>
+                        <div class="quality-factory-new skin-pattern">После полевых испытаний</div>
+                        <div class="price-tag d-inline-block mb-3">$659.99</div>
+                        <button class="btn btn-custom btn-sm" onclick="addToCart('Нож-бабочка | Ультрафиолет')">
+                            <i class="fas fa-cart-plus"></i> В корзину
+                        </button>
+                    </div>
+                </div>
+
+                <!-- КАРТОЧКА 2 -->
+                <div class="col-md-6 col-lg-4 col-xl-3">
+                    <div class="skin-card p-3 text-center h-100">
+                        <img src="https://assets.lis-skins.com/market_images/15457_b.png" class="skin-image"
+                            style="border: 3px solid #ff0037" alt="Нож-карамбіт">
+                        <div class="skin-name">AK-47 | Неоновая революция</div>
+                        <div class="quality-minimal-wear skin-pattern">Прямо с завода</div>
+                        <div class="price-tag d-inline-block mb-3">$310.50</div>
+                        <button class="btn btn-custom btn-sm" onclick="addToCart('AK-47 | Неоновая революция')">
+                            <i class="fas fa-cart-plus"></i> В корзину
+                        </button>
+                    </div>
+                </div>
+
+                <!-- КАРТОЧКА 3 -->
+                <div class="col-md-6 col-lg-4 col-xl-3">
+                    <div class="skin-card p-3 text-center h-100">
+                        <img src="https://assets.lis-skins.com/market_images/16512_b.png" class="skin-image"
+                            style="border: 3px solid #fcf085" alt="Перчатки">
+                        <div class="skin-name">Спортивные перчатки | Живая изгородь</div>
+                        <div class="quality-factory-new skin-pattern">Прямо с завода</div>
+                        <div class="price-tag d-inline-block mb-3">$25459.99</div>
+                        <button class="btn btn-custom btn-sm"
+                            onclick="addToCart('Спортивные перчатки | Живая изгородь')">
+                            <i class="fas fa-cart-plus"></i> В корзину
+                        </button>
+                    </div>
+                </div>
+
+                <!-- КАРТОЧКА 4 -->
+                <div class="col-md-6 col-lg-4 col-xl-3">
+                    <div class="skin-card p-3 text-center h-100">
+                        <img src="https://assets.lis-skins.com/market_images/8646_b.png" class="skin-image"
+                            style="border: 3px solid #ff235a" alt="AWP">
+                        <div class="skin-name">AWP | Удар молнии</div>
+                        <div class="quality-minimal-wear skin-pattern">Прямо с завода</div>
+                        <div class="price-tag d-inline-block mb-3">$579.99</div>
+                        <button class="btn btn-custom btn-sm" onclick="addToCart('AWP | Удар молнии')">
+                            <i class="fas fa-cart-plus"></i> В корзину
+                        </button>
+                    </div>
+                </div>
+
+                <!-- КАРТОЧКА 5 -->
+                <div class="col-md-6 col-lg-4 col-xl-3">
+                    <div class="skin-card p-3 text-center h-100">
+                        <img src="https://assets.lis-skins.com/market_images/150763_b.png" class="skin-image"
+                            style="border: 3px solid #ff004c" alt="Desert Eagle">
+                        <div class="skin-name">Desert Eagle | Океанское побережье</div>
+                        <div class="quality-field-tested skin-pattern">После полевых испытаний</div>
+                        <div class="price-tag d-inline-block mb-3">$45.50</div>
+                        <button class="btn btn-custom btn-sm" onclick="addToCart('Desert Eagle | Океанское побережье')">
+                            <i class="fas fa-cart-plus"></i> В корзину
+                        </button>
+                    </div>
+                </div>
+
+                <!-- КАРТОЧКА 6 -->
+                <div class="col-md-6 col-lg-4 col-xl-3">
+                    <div class="skin-card p-3 text-center h-100">
+                        <img src="https://assets.lis-skins.com/market_images/187158_b.png" class="skin-image"
+                            style="border: 3px solid #ff00ff" alt="M4A4">
+                        <div class="skin-name">M4A1-S | Стратосфера</div>
+                        <div class="quality-factory-new skin-pattern">Немного поношенное</div>
+                        <div class="price-tag d-inline-block mb-3">$43.99</div>
+                        <button class="btn btn-custom btn-sm" onclick="addToCart('M4A1-S | Стратосфера')">
+                            <i class="fas fa-cart-plus"></i> В корзину
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-4 bg-dark text-light mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5><i class="fas fa-gem"></i> SAN Store</h5>
+                    <p>Лучший маркетплейс для покупки и продажи скинов CS2/CS:GO</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Контакты</h5>
+                    <p><i class="fas fa-phone"></i> 8 (800) 555-35-35</p>
+                    <p><i class="fas fa-envelope"></i> support@sanstore.com</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Быстрые ссылки</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="index.html" class="text-light">Главная</a></li>
+                        <li><a href="profile.html" class="text-light">Личный кабинет</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p>&copy; 2025 SAN Store. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Функция выбора категории
+        function selectCategory(element, category) {
+            // Убираем активный класс у всех категорий
+            document.querySelectorAll('.weapon-category').forEach(el => {
+                el.classList.remove('active');
+            });
+
+            // Добавляем активный класс к выбранной категории
+            element.classList.add('active');
+
+            // Показываем уведомление о выборе категории
+            showNotification(`Выбрана категория: ${element.querySelector('p').textContent}`, 'info');
+        }
+
+        // Проверка авторизации при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function () {
+            checkAuthStatus();
+
+            // Проверяем, был ли только что выполнен вход
+            const justLoggedIn = localStorage.getItem('justLoggedIn');
+            if (justLoggedIn === 'true') {
+                showNotification('Вы успешно вошли в систему!', 'success');
+                localStorage.removeItem('justLoggedIn');
+            }
+        });
+
+        // Функция проверки статуса авторизации
+        function checkAuthStatus() {
+            const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+            const userName = localStorage.getItem('userName') || 'Пользователь';
+
+            const authButtons = document.getElementById('authButtons');
+            const userProfile = document.getElementById('userProfile');
+            const userWelcome = document.getElementById('userWelcome');
+
+            if (isLoggedIn) {
+                authButtons.style.display = 'none';
+                userProfile.style.display = 'block';
+                userWelcome.textContent = `Добро пожаловать, ${userName}!`;
+            } else {
+                authButtons.style.display = 'block';
+                userProfile.style.display = 'none';
+            }
+        }
+
+        // Функция выхода
+        function logout() {
+            localStorage.removeItem('userLoggedIn');
+            localStorage.removeItem('userName');
+            showNotification('Вы успешно вышли из системы', 'info');
+            setTimeout(() => {
+                checkAuthStatus();
+            }, 1000);
+        }
+
+        // Функция для уведомлений
+        function showNotification(message, type = 'info') {
+            const container = document.getElementById('notificationContainer');
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+
+            const typeIcons = {
+                'success': 'fa-check-circle',
+                'error': 'fa-exclamation-circle',
+                'info': 'fa-info-circle'
+            };
+
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <i class="fas ${typeIcons[type] || 'fa-info-circle'} me-2"></i>
+                    ${message}
+                </div>
+                <button class="notification-close" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+
+            container.appendChild(notification);
+
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.style.animation = 'slideOut 0.3s ease-out';
+                    setTimeout(() => {
+                        if (notification.parentElement) {
+                            notification.remove();
+                        }
+                    }, 300);
+                }
+            }, 5000);
+        }
+
+        // Добавление в корзину
+        function addToCart(skinName) {
+            showNotification(`Скин "${skinName}" добавлен в корзину!`, 'success');
+        }
+    </script>
+</body>
+
+</html>

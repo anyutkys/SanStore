@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет - SAN Store</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --btn-color: #8ef5d1;
+            --accent-color: #d398f5;
+            --header-bg: #FCD4EB;
+            --bg-light: #fefefe;
+            --text-dark: #333;
+            --card-bg: #fff;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .custom-header {
+            background-color: var(--header-bg) !important;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .profile-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(211, 152, 245, 0.3);
+        }
+
+        .balance-card {
+            background: linear-gradient(135deg, var(--accent-color), #b579e2);
+            border-radius: 15px;
+            padding: 25px;
+            color: white;
+        }
+
+        .skin-card {
+            background: var(--card-bg);
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-custom {
+            background-color: var(--btn-color);
+            color: #333;
+            border: none;
+            font-weight: 600;
+        }
+
+        .btn-accent {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            font-weight: 600;
+        }
+
+        .admin-badge {
+            background: linear-gradient(45deg, #ff6b00, #ff8c00);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light custom-header">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-gem"></i> SAN Store
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a href="index.html" class="btn btn-accent">
+                    <i class="fas fa-store"></i> Вернуться в магазин
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div id="authWarning" class="alert alert-warning text-center" style="display: none;">
+            <h4>Доступ запрещен!</h4>
+            <p>Для просмотра личного кабинета необходимо авторизоваться.</p>
+            <a href="login.html" class="btn btn-custom">Войти</a>
+            <a href="register.html" class="btn btn-accent">Зарегистрироваться</a>
+        </div>
+
+        <div id="profileContent" style="display: none;">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="profile-card text-center">
+                        <img src="img/5253538253862800833.jpg" width="150" alt="Аватар"
+                            class="rounded-circle mb-3">
+                        <h4 id="userName">Иван Петров</h4>
+                        <p id="userEmail" class="text-muted">user@example.com</p>
+
+                        <div id="adminBadge" class="admin-badge mb-3" style="display: none;">
+                            <i class="fas fa-crown"></i> АДМИНИСТРАТОР
+                        </div>
+
+                        <div class="balance-card text-center mb-4">
+                            <h5>Баланс кошелька</h5>
+                            <h3>$<span id="userBalance">0.00</span></h3>
+                            <div class="d-grid gap-2 mt-3">
+                                <button class="btn btn-light btn-sm" onclick="addBalance()">
+                                    <i class="fas fa-plus"></i> Пополнить
+                                </button>
+                                <button class="btn btn-outline-light btn-sm" onclick="withdrawBalance()">
+                                    <i class="fas fa-dollar-sign"></i> Вывести
+                                </button>
+                            </div>
+                        </div>
+
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item bg-transparent">
+                                <i class="fas fa-shopping-cart me-2"></i>Мои покупки
+                            </li>
+                            <li class="list-group-item bg-transparent">
+                                <i class="fas fa-history me-2"></i>История операций
+                            </li>
+                            <li class="list-group-item bg-transparent">
+                                <i class="fas fa-cog me-2"></i>Настройки аккаунта
+                            </li>
+                            <li class="list-group-item bg-transparent">
+                                <i class="fas fa-shield-alt me-2"></i>Безопасность
+                            </li>
+                        </ul>
+
+                        <button class="btn btn-outline-danger w-100 mt-3" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Выйти
+                        </button>
+                    </div>
+                </div>
+
+                <div class="col-md-8">
+                    <div class="profile-card mb-4">
+                        <h4 class="mb-4">Статистика аккаунта</h4>
+                        <div class="row text-center">
+                            <div class="col-md-3 mb-3">
+                                <div class="border rounded p-3">
+                                    <h5 class="text-accent" id="totalPurchases">0</h5>
+                                    <small>Всего покупок</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="border rounded p-3">
+                                    <h5 class="text-accent" id="totalSpent">$0.00</h5>
+                                    <small>Потрачено всего</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="border rounded p-3">
+                                    <h5 class="text-accent" id="accountAge">0 дней</h5>
+                                    <small>Аккаунт создан</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="border rounded p-3">
+                                    <h5 class="text-accent" id="skinCount">0</h5>
+                                    <small>Скинов в инвентаре</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="profile-card">
+                        <h4 class="mb-4">Последние покупки</h4>
+                        <div id="purchasesList">
+                            <div class="text-center text-muted py-4">
+                                <i class="fas fa-shopping-cart fa-3x mb-3"></i>
+                                <p>У вас пока нет покупок</p>
+                                <a href="index.html" class="btn btn-custom">Перейти к покупкам</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="profile-card mt-4" id="adminPanel" style="display: none;">
+                        <h4 class="mb-4"><i class="fas fa-crown"></i> Панель администратора</h4>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="border rounded p-3 text-center">
+                                    <i class="fas fa-dollar-sign fa-2x mb-2 text-success"></i>
+                                    <h5>Управление ценами</h5>
+                                    <p>Редактирование стоимости скинов</p>
+                                    <a href="index.html" class="btn btn-sm btn-custom">Перейти</a>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="border rounded p-3 text-center">
+                                    <i class="fas fa-plus-circle fa-2x mb-2 text-primary"></i>
+                                    <h5>Добавление скинов</h5>
+                                    <p>Создание новых слотов</p>
+                                    <a href="index.html" class="btn btn-sm btn-custom">Перейти</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const currentUser = JSON.parse(localStorage.getItem('sanStoreCurrentUser'));
+            const authWarning = document.getElementById('authWarning');
+            const profileContent = document.getElementById('profileContent');
+
+            if (!currentUser) {
+                authWarning.style.display = 'block';
+                profileContent.style.display = 'none';
+                return;
+            }
+
+            authWarning.style.display = 'none';
+            profileContent.style.display = 'block';
+
+            document.getElementById('userName').textContent = currentUser.firstName || 'Пользователь';
+            document.getElementById('userEmail').textContent = currentUser.email;
+
+            const isAdmin = currentUser.email === 'admin@' && currentUser.password === '1212';
+            if (isAdmin) {
+                document.getElementById('adminBadge').style.display = 'block';
+                document.getElementById('adminPanel').style.display = 'block';
+            }
+
+            loadUserData(currentUser);
+        });
+
+        function loadUserData(user) {
+            const userData = JSON.parse(localStorage.getItem('sanStoreUserData')) || {};
+            const userStats = userData[user.email] || {
+                balance: 0,
+                totalPurchases: 0,
+                totalSpent: 0,
+                registrationDate: new Date().toISOString(),
+                skins: []
+            };
+
+            document.getElementById('userBalance').textContent = userStats.balance.toFixed(2);
+            document.getElementById('totalPurchases').textContent = userStats.totalPurchases;
+            document.getElementById('totalSpent').textContent = '$' + userStats.totalSpent.toFixed(2);
+            document.getElementById('skinCount').textContent = userStats.skins.length;
+
+            const regDate = new Date(userStats.registrationDate);
+            const today = new Date();
+            const diffDays = Math.ceil((today - regDate) / (1000 * 60 * 60 * 24));
+            document.getElementById('accountAge').textContent = diffDays + ' дней';
+
+            loadPurchaseHistory(userStats.skins);
+        }
+
+        function loadPurchaseHistory(skins) {
+            const purchasesList = document.getElementById('purchasesList');
+            if (skins.length === 0) return;
+
+            purchasesList.innerHTML = '';
+            skins.forEach(skin => {
+                const purchaseItem = `
+                    <div class="skin-card p-3 mb-3">
+                        <div class="row align-items-center">
+                            <div class="col-2">
+                                <img src="${skin.image}" alt="${skin.name}" class="img-fluid rounded">
+                            </div>
+                            <div class="col-6">
+                                <h6 class="mb-1">${skin.name}</h6>
+                                <small class="text-muted">Куплен: ${new Date(skin.purchaseDate).toLocaleDateString()}</small>
+                            </div>
+                            <div class="col-4 text-end">
+                                <span class="price-tag">$${skin.price}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                purchasesList.innerHTML += purchaseItem;
+            });
+        }
+
+        function addBalance() {
+            const amount = prompt('Введите сумму для пополнения ($):');
+            if (amount && !isNaN(amount) && amount > 0) {
+                const currentUser = JSON.parse(localStorage.getItem('sanStoreCurrentUser'));
+                const userData = JSON.parse(localStorage.getItem('sanStoreUserData')) || {};
+                const userStats = userData[currentUser.email] || { balance: 0 };
+
+                userStats.balance += parseFloat(amount);
+                userData[currentUser.email] = userStats;
+                localStorage.setItem('sanStoreUserData', JSON.stringify(userData));
+
+                document.getElementById('userBalance').textContent = userStats.balance.toFixed(2);
+                alert('Баланс пополнен на $' + amount);
+            }
+        }
+
+        function withdrawBalance() {
+            alert('Функция вывода в разработке');
+        }
+
+        function logout() {
+            if (confirm('Выйти из системы?')) {
+                localStorage.removeItem('sanStoreCurrentUser');
+                window.location.href = 'login.html';
+            }
+        }
+    </script>
+</body>
+
+</html>
